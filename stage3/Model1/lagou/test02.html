@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>注册用户信息</title>
+    <script>
+        function checkUsername(){
+            var name=document.getElementById("username").value
+            if(name!="admin"){
+                //用户名校验只能是"admin"
+                alert("用户名错误");
+            }
+        }
+
+        function onSubmitFun(){
+            //自我介绍的内容
+            var textValue=document.getElementById("remark").value
+            alert(textValue);
+            
+        }
+    </script>
+</head>
+<body>
+    <form onsubmit="onSubmitFun()">
+        <table border="1" width="64%" align="center">
+            <tr>
+                <td>用户名：</td>
+                <td>
+                    <input type="text" name="username" id="username" onblur="checkUsername()">
+                </td>
+            </tr>
+            <tr>
+                <td>密码：</td>
+                <td>
+                    <input type="password" name="password">
+                </td>
+            </tr>
+            <tr>
+                <td>性别：</td>
+                <td>
+                    <input type="radio" name="sex" checked="checked">男
+                    <input type="radio" name="sex" >女
+                </td>
+            </tr>
+            <tr>
+                <td>学历：</td>
+                <td>  
+                    <input type="radio" name="education" checked="checked">本科
+                    <input type="radio" name="education" >专科
+                </td>
+            </tr>
+            <tr>
+                <td>自我介绍：</td>
+                <td>
+                    <textarea name="remark" rows="5" cols="100" id="remark"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="submit" value="提交" > 
+                    <input type="reset" value="取消"> 
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>
