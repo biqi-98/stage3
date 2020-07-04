@@ -207,12 +207,14 @@
             }
             showPersons();
         }
+        
     </script>
 
 </head>
 
 <body>
-    <div >
+    <div style="color:#777777;font-size:32px">习题</div>
+    <div style="margin: 15px;">
         <button type="button" class="btn" data-toggle="modal" data-target="#myModal"><span class="glyphicon">新增</span></button>
         <button type="button" class="btn" onclick="removeCheckId();" data-dismiss="modal"><span class="glyphicon">删除</span></button>
         <button type="button" class="btn" onclick="updateCheckId();"><span class="glyphicon">编辑</span></button>
@@ -259,6 +261,9 @@
             </div>
         </div>
     </div>
+    <script>
+        window.οnlοad=showPersons()
+    </script>
 </body>
 
 </html>
