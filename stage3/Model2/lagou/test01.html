@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>拉勾教育-Bootstrap</title>
+    <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="./css/test01.css" />
+    <script src="./js/jquery-1.9.1.min.js" type="text/javascript" charset="UTF-8"></script>
+    <script src="./js/bootstrap.min.js" type="text/javascript" charset="UTF-8"></script>
+
+    <script>
+        // 1、需求：单页面加载显示的时候，有两个按钮：1、显示用户数据；2、添加新用户
+        // 2、需求：点击【显示用户数据】按钮的时候，应该把我们的用户对象数组基于table表格遍历出来
+        var id_index = 1001; //设置用户编号
+        var p1 = { "id": id_index, "name": "张三", "age": 22, "sex": "男", "password": 1234, "birthday": "1991-01-01" }
+        id_index++;
+        var p2 = { "id": id_index, "name": "李四", "age": 21, "sex": "女", "password": 1234, "birthday": "1992-02-02" }
+        var persons = [p1, p2]
+
+        // 显示用户列表的
+        function showPersons() {
+            // 基于页面中的table表格显示用户列表
+            var tb = $("#tb1")
+            // 1、显示table的第一行标题(需要在table中添加tr的元素)><td>操作</td></tr>
+            var str = ""
+            // 2、从第二行开始遍历用户数组
+            var idSelectStr = document.getElementById('idSelect').value
+            var nameSelectStr = document.getElementById('nameSelect').value
+            var showPerson = []
+            if (idSelectStr == "" && nameSelectStr == "") {
+                showPerson = persons
+            } else if (idSelectStr != "" && nameSelectStr == "") {
+                for (var i = 0; i < persons.length; i++) {
+                    if (persons[i].id == idSelectStr) {
+                        showPerson.push(persons[i])
+                    }
+                }
+            } else if (idSelectStr == "" && nameSelectStr != "") {
+                for (var i = 0; i < persons.length; i++) {
+                    if (persons[i].name == nameSelectStr) {
+                        showPerson.push(persons[i])
+                    }
+                }
+            } else {
+                for (var i = 0; i < persons.length; i++) {
+                    if (persons[i].id == idSelectStr && persons[i].name == nameSelectStr) {
+                        showPerson.push(persons[i])
+                    }
+                }
+            }
+            if (showPerson.length == 0) {
+
+            } else {
+                str = "<tr><th>序号</th><th>工号</th><th>姓名</th><th>性别</th><th>密码</th><th>年龄</th><th>出生日期</th></tr>"
+                for (var i = 0; i < showPerson.length; i++) {
+                    if (i % 2 == 0) {
+                        var trclass = " class='info'"
+                    } else {
+                        var trclass = " class='warning'"
+                    }
+                    str += "<tr" + trclass + "><td><input type=checkbox name=checkId value=" + showPerson[i].id + "></label>"
+                        + "</td><td>" + showPerson[i].id
+                        + "</td><td>" + showPerson[i].name
+                        + "</td><td>" + showPerson[i].sex
+                        + "</td><td>" + showPerson[i].age
+                        + "</td><td>" + showPerson[i].password
+                        + "</td><td>" + showPerson[i].birthday
+                        + "</td></tr>"
+                }
+            }
+            tb.html(str)
+
+
+        }
+
+        // 保存或者修改用户信息的方法
+        function saveOrUpdatePerson() {
+            //判断是保存还是添加
+            //获取pid的这个数据
+            var pid = $("#pid").val()
+            //如果存在，那么就是修改
+            if (pid) { // 有值 为 true ; 
+                updateById(pid)
+            } else {// 如果不存在那就说明应该是添加
+                save()
+            }
+
+        }
+
+        // 修改用户信息的方法
+        function updateById(pid) {
+            // 把div中的数据获取出来
+            // 放在一个对象中
+            var pname = $("#pname").val()
+            var psex = $("#sex").val()
+            var page = $("#age").val()
+            var password = $("#password").val()
+            var pbirthday = $("#birthday").val()
+            var p = { "id": pid, "name": pname, "sex": psex, "password": password, "age": page, "birthday": pbirthday }
+            // 遍历这个用户数组中的每一个对象和pid来比较是否是此对象
+            for (var i = 0; i < persons.length; i++) {
+                if (persons[i].id == pid) {// 如果是此对象， 用新的对象替换这个数组中的对象
+                    persons[i] = p
+                }
+            }
+            //关闭此窗口
+            close()
+        }
+
+        // 保存用户信息的方法
+        function save() {
+            //获取div中的输入框内容//根据Id
+            // var pid = persons.length + 1 ;
+            var pid = ++id_index;
+            var pname = $("#pname").val()
+            var psex = $("#sex").val()
+            var page = $("#age").val()
+            var password = $("#password").val()
+            var pbirthday = $("#birthday").val()
+            var p = { "id": pid, "name": pname, "sex": psex, "password": password, "age": page, "birthday": pbirthday }
+
+            //把对象添加到数组中
+            persons.push(p)
+            //关闭这个窗口
+            close()
+        }
+        // 更新时回显方法
+        function showUpdateForm(id) {
+            // 根据这个Id获取用户对象数组中的某一个对象，并且把数据回显到div中
+            for (var i = 0; i < persons.length; i++) {
+                if (persons[i].id == id) {
+                    $("#pid").val(id)
+                    $("#pname").val(persons[i].name)
+                    $("#sex").val(persons[i].sex)
+                    $("#age").val(persons[i].age)
+                    $("#password").val(persons[i].password)
+                    $("#birthday").val(persons[i].birthday)
+                }
+            }
+        }
+
+        // 根据用户Id删除用户
+        function removeById(id) {
+            // 弹出窗口提示是否删除
+            // confirm: 指定消息并且带有确定和取消的对话框
+            const con = window.confirm("您确定要删除工号为" + id + "的记录吗？") //点击 确定  = true
+            if (con == true) {
+                for (var i = 0; i < persons.length; i++) {
+                    if (persons[i].id == id) {
+                        //如果判断此数组中的某一个对象id 和 要删除的对象Id一致 则删除此元素
+                        delete persons[i];
+                    }
+                }
+                //删除后去null值
+                for (var i = 0; i < persons.length; i++) {
+                    if (persons[i] == '' || persons[i] == null || typeof (persons[i]) == undefined) {
+                        persons.splice(i, 1);
+                        i = i - 1;
+                    }
+                }
+            }
+        }
+        // 清空此模态框中的数据
+        function clearPerson() {
+            $("#pname").val("")
+            $("#sex").val("")
+            $("#age").val("")
+            $("#password").val("")
+            $("#birthday").val("")
+        }
+        // 关闭窗口的方法
+        function close() {
+            // 关闭窗口
+            $('#myModal').modal('hide');
+            // 清空此div中的数据
+            clearPerson();
+            // 显示用户列表的
+            showPersons();
+        }
+
+        function removeCheckId() {
+            var checks = document.getElementsByName('checkId')
+            for (var i = checks.length - 1; i >= 0; i--) {
+                if (checks[i].checked == true) {
+                    removeById(checks[i].value)
+                }
+            }
+            showPersons();
+        }
+
+        function updateCheckId() {
+            var checks = document.getElementsByName('checkId')
+            var checkIds = []
+            for (var i = checks.length - 1; i >= 0; i--) {
+                if (checks[i].checked == true) {
+                    checkIds.push(checks[i].value)
+                }
+            }
+            if (checkIds.length > 1) {
+                alert("编辑时只能选择一个")
+            } else {
+                showUpdateForm(checkIds[0])
+                $('#myModal').modal('show');
+            }
+            showPersons();
+        }
+    </script>
+
+</head>
+
+<body>
+    <div >
+        <button type="button" class="btn" data-toggle="modal" data-target="#myModal"><span class="glyphicon">新增</span></button>
+        <button type="button" class="btn" onclick="removeCheckId();" data-dismiss="modal"><span class="glyphicon">删除</span></button>
+        <button type="button" class="btn" onclick="updateCheckId();"><span class="glyphicon">编辑</span></button>
+        <button type="button" class="btn" onclick="showPersons();"><span class="glyphicon">查询</span></button>
+        <input type="text" placeholder="按工号查询" size="5px" id="idSelect">
+        <input type="text" placeholder="按姓名查询" size="5px" id="nameSelect">
+    </div>
+    <!-- 显示用户列表的table -->
+    <div>
+        <table class="table table-hover" id="tb1"></table>
+    </div>
+    <!-- 添加用户信息的  模态框 -->
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- 模态框头部 -->
+                <div class="modal-header">
+                    <h4 class="modal-title">用户信息</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- 模态框主体 -->
+                <div class="modal-body">
+                    <form action="#" method="post" onsubmit="saveOrUpdatePerson();return false;">
+                        <input id="pid" hidden="hidden" />
+                        <!--required="required" 提交前必须填写-->
+                        请输入人员姓名：<input class="form-control" id="pname" type="text" /><br />
+                        请输入人员性别：
+                        <select class="form-control" id="sex">
+                            <option value="">--请选择--</option>
+                            <option value="男">男</option>
+                            <option value="女">女</option>
+                        </select><br />
+
+                        请输入人员密码：<input class="form-control" id="password" type="text" /><br />
+                        请输入人员年龄：<input class="form-control" id="age" type="number" required="required" /><br />
+                        请输入出生日期：<input class="form-control" id="birthday" type="date" required="required" /><br />
+
+                        <button class="btn btn-success btn-lg" type="submit"><span class="glyphicon glyphicon-floppy-saved"></span>保存</button>
+                        <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-remove"></span>关闭</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
